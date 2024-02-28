@@ -1,6 +1,5 @@
 'use client'
 
-import Button from '@/components/ui/Button'
 import { OrbitControls } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import dynamic from 'next/dynamic'
@@ -50,22 +49,48 @@ export default function Page() {
   const scaleDown = () => {
     setScale((scale) => scale - 0.1)
   }
+
+  const toggleDash = (params) => {
+    setSelectedDash((currentValue) => (currentValue === 'dash1' ? 'dash2' : 'dash1'))
+  }
+
+  const toggleEngine = (params) => {
+    setSelectedMotor((currentValue) => (currentValue === 'motor1' ? 'motor2' : 'motor1'))
+  }
   return (
     <>
       <div className='size-full'>
-        <Button onClick={changeRotation}>test</Button>
-        <div></div>
-        <Button onClick={dogvis}>dogvis</Button>
-        <div></div>
-        <Button onClick={scaleUp}>+</Button>
-        <div></div>
-        <Button onClick={scaleDown}>-</Button>
+        <div className='absolute right-4 top-10 z-10 mr-6 flex flex-col gap-4 text-white'>
+          {/* <Button onClick={changeRotation}>test</Button>
+          <div></div>
+          <Button onClick={dogvis}>dogvis</Button>
+          <div></div>
+          <Button onClick={scaleUp}>+</Button>
+          <div></div>
+          <Button onClick={scaleDown}>-</Button> */}
+          <div className='flex items-center justify-between gap-3'>
+            Dash:
+            <div className='flex gap-2'>
+              <button onClick={toggleDash} className='hover:text-orange-500'>{`<-`}</button>
+              {selectedDash}
+              <button onClick={toggleDash} className='hover:text-orange-500'>{`->`}</button>
+            </div>
+          </div>
 
-        <Button onClick={() => setSelectedDash('dash1')}>Dash 1</Button>
-        <Button onClick={() => setSelectedDash('dash2')}>Dash 2</Button>
-        <Button onClick={() => setSelectedMotor('motor1')}>Engine 1</Button>
-        <Button onClick={() => setSelectedMotor('motor2')}>Engine 2</Button>
+          <div className='flex items-center justify-between gap-3'>
+            Engine:
+            <div className='flex gap-2'>
+              <button onClick={toggleEngine} className='hover:text-orange-500'>{`<-`}</button>
+              {selectedMotor}
+              <button onClick={toggleEngine} className='hover:text-orange-500'>{`->`}</button>
+            </div>
+          </div>
 
+          {/* <Button onClick={() => setSelectedDash('dash1')}>Dash 1</Button>
+          <Button onClick={() => setSelectedDash('dash2')}>Dash 2</Button>
+          <Button onClick={() => setSelectedMotor('motor1')}>Engine 1</Button>
+          <Button onClick={() => setSelectedMotor('motor2')}>Engine 2</Button> */}
+        </div>
         <Canvas>
           {/* <View orbit className='size-full'> */}
           <Suspense fallback={null}>

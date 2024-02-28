@@ -71,7 +71,15 @@ export function Dog(props) {
 export function Boat({ selectedDash, selectedMotor, ...props }) {
   const { scene } = useGLTF('/boattestglb.glb')
 
+  const ref = useRef()
+
   const dashRef = useRef()
+
+  useFrame((state) => {
+    const t = state.clock.getElapsedTime()
+    ref.current.rotation.set(Math.cos(t / 4) / 18, Math.sin(t / 4) / 20, -0.2 - (1 + Math.sin(t / 1.5)) / 50)
+    ref.current.position.y = (1 + Math.sin(t / 1.5)) / 30
+  })
 
   useEffect(() => {
     // Ensure all parts start in a consistent state
@@ -136,5 +144,5 @@ export function Boat({ selectedDash, selectedMotor, ...props }) {
     }
   }, [selectedDash])
 
-  return <primitive object={scene} {...props} />
+  return <primitive ref={ref} object={scene} {...props} />
 }
