@@ -1,11 +1,11 @@
 'use client'
 
-import { useGLTF } from '@react-three/drei'
+import { Line, MeshDistortMaterial, useCursor, useGLTF } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
-import * as THREE from 'three'
-import { useMemo, useRef, useState } from 'react'
-import { Line, useCursor, MeshDistortMaterial } from '@react-three/drei'
+import gsap from 'gsap'
 import { useRouter } from 'next/navigation'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import * as THREE from 'three'
 
 export const Blob = ({ route = '/', ...props }) => {
   const router = useRouter()
@@ -16,7 +16,8 @@ export const Blob = ({ route = '/', ...props }) => {
       onClick={() => router.push(route)}
       onPointerOver={() => hover(true)}
       onPointerOut={() => hover(false)}
-      {...props}>
+      {...props}
+    >
       <sphereGeometry args={[1, 64, 64]} />
       <MeshDistortMaterial roughness={0.5} color={hovered ? 'hotpink' : '#1fb2f5'} />
     </mesh>
@@ -63,6 +64,77 @@ export function Duck(props) {
 }
 export function Dog(props) {
   const { scene } = useGLTF('/dog.glb')
+
+  return <primitive object={scene} {...props} />
+}
+
+export function Boat({ selectedDash, selectedMotor, ...props }) {
+  const { scene } = useGLTF('/boattestglb.glb')
+
+  const dashRef = useRef()
+
+  useEffect(() => {
+    // Ensure all parts start in a consistent state
+    scene.traverse((child) => {
+      if (
+        child.isMesh &&
+        (child.name === 'dash1' || child.name === 'dash2' || child.name === 'motor1' || child.name === 'motor2')
+      ) {
+        if (child.material) {
+          child.material.transparent = true // Enable transparency for animation
+          child.material.opacity = 0 // Start fully transparent
+        }
+        child.visible = false // Start with all parts invisible
+      }
+    })
+
+    // Animate and display the selected parts
+    scene.traverse((child) => {
+      if (child.isMesh && child.material && child.name === selectedMotor) {
+        child.visible = true // Make the selected part visible
+        // Animate to make visible
+        gsap.to(child.material, { opacity: 1, duration: 1 })
+      }
+    })
+
+    scene.traverse((child) => {
+      if (child.isMesh && child.material && child.name === selectedDash) {
+        child.visible = true // Make the selected part visible
+        // Animate to make visible
+        gsap.to(child.material, { opacity: 1, duration: 1 })
+      }
+    })
+
+    scene.traverse((child) => {
+      if ((child.isMesh && child.name === 'dash1') || child.name === 'dash2') {
+        // Assuming 'dash1' is the name you're interested in
+        dashRef.current = child
+      }
+    })
+  }, [scene, selectedDash, selectedMotor])
+
+  useFrame(() => {
+    if (dashRef.current && dashRef.current.material.opacity < 1) {
+      dashRef.current.rotation.y += 0.01 // Rotate slowly
+    }
+  })
+
+  useEffect(() => {
+    const dash1Mesh = scene.getObjectByName('dash1')
+    const dash2Mesh = scene.getObjectByName('dash2')
+
+    // Assuming you've determined which dashboard is selected and set it to `selectedDash`
+    let targetMesh = selectedDash === 'dash1' ? dash1Mesh : dash2Mesh
+    let otherMesh = selectedDash === 'dash1' ? dash2Mesh : dash1Mesh
+
+    if (targetMesh && otherMesh) {
+      // Fade out the other mesh
+      gsap.to(otherMesh.material, { opacity: 0, duration: 1 })
+      // Fade in and rotate the target mesh
+      gsap.fromTo(targetMesh.material, { opacity: 0 }, { opacity: 1, duration: 1 })
+      gsap.to(targetMesh.rotation, { y: Math.PI * 2, duration: 1, onComplete: () => (targetMesh.rotation.y = 0) })
+    }
+  }, [selectedDash])
 
   return <primitive object={scene} {...props} />
 }
