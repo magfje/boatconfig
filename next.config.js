@@ -16,10 +16,10 @@ const nextConfig = {
   // compiler: {
   //   styledComponents: true,
   // },
-  output: 'export',
-  basePath: '/github-pages',
+  // output: 'export',
+  // basePath: '/github-pages',
   reactStrictMode: false, // Recommended for the `pages` directory, default in `app`.
-  images: { unoptimized: true },
+  images: {},
   webpack(config, { isServer }) {
     if (!isServer) {
       // We're in the browser build, so we can safely exclude the sharp module
