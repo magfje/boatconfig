@@ -15,7 +15,7 @@
     "build": "next build",
     "analyze": "ANALYZE=true next build",
     "start": "next start",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d .next"
   },
   "dependencies": {
     "@ducanh2912/next-pwa": "^10.0.0",
