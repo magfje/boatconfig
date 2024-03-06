@@ -1,6 +1,7 @@
 'use client'
 
-import { OrbitControls } from '@react-three/drei'
+import { OceanMesh } from '@/components/canvas/Ocean'
+import { OrbitControls, Stats } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import dynamic from 'next/dynamic'
 import { Suspense, useState } from 'react'
@@ -10,6 +11,8 @@ import { Suspense, useState } from 'react'
 // const Dog2 = dynamic(() => import('@/components/canvas/Examples').then((mod) => mod.Dog), { ssr: false })
 // const Duck = dynamic(() => import('@/components/canvas/Examples').then((mod) => mod.Duck), { ssr: false })
 const Boat = dynamic(() => import('@/components/canvas/Examples').then((mod) => mod.Boat), { ssr: false })
+const AlphaBoat = dynamic(() => import('@/components/canvas/Examples').then((mod) => mod.AlphaBoat), { ssr: false })
+// const OceanMesh = dynamic(() => import('@/components/canvas/Ocean').then((mod) => mod.OceanMesh), { ssr: false })
 // const View = dynamic(() => import('@/components/canvas/View').then((mod) => mod.View), {
 //   ssr: false,
 //   loading: () => (
@@ -57,6 +60,7 @@ export default function Page() {
   const toggleEngine = (params) => {
     setSelectedMotor((currentValue) => (currentValue === 'motor1' ? 'motor2' : 'motor1'))
   }
+
   return (
     <>
       <div className='size-full'>
@@ -96,9 +100,12 @@ export default function Page() {
           <Suspense fallback={null}>
             <OrbitControls />
             {/* {dog2vis && <Duck scale={scale} position={[2, -1.6, 5]} />} */}
-            <Boat selectedDash={selectedDash} selectedMotor={selectedMotor} scale={0.5} rotation={[0.45, -0.6, 0]} />
-
+            {/* <Boat selectedDash={selectedDash} selectedMotor={selectedMotor} scale={0.5} rotation={[0.45, -0.6, 0]} /> */}
+            <AlphaBoat scale={0.01} position={[0, 0, 0]} />
+            <OceanMesh rotation={[0, 0, 0]} color={'#ffffff'} />
             <Common color={'#050505'} />
+            <fog attach='fog' color='#050505' near={4} far={20} />
+            <Stats />
           </Suspense>
           {/* </View> */}
         </Canvas>

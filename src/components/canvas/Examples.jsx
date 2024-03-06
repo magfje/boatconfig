@@ -68,6 +68,22 @@ export function Dog(props) {
   return <primitive object={scene} {...props} />
 }
 
+export function AlphaBoat(props) {
+  const { scene } = useGLTF('/alpha.glb')
+
+  const ref = useRef()
+
+  useFrame((state) => {
+    const t = state.clock.getElapsedTime()
+    ref.current.rotation.set(Math.cos(t / 4) / 18, Math.sin(t / 4) / 20, Math.sin(t / 1.5) / 50)
+    ref.current.position.y = (-2 + Math.sin(t / 1.5)) / 30
+  })
+
+  // useFrame((state, delta) => (scene.rotation.y += delta))
+
+  return <primitive ref={ref} object={scene} {...props} />
+}
+
 export function Boat({ selectedDash, selectedMotor, ...props }) {
   const { scene } = useGLTF('/boattestglb.glb')
 
@@ -146,3 +162,37 @@ export function Boat({ selectedDash, selectedMotor, ...props }) {
 
   return <primitive ref={ref} object={scene} {...props} />
 }
+
+// const OceanMaterial = shaderMaterial(
+//   // Uniforms
+//   { time: 0, color: new THREE.Color(0x00ffff) },
+//   // Vertex shader
+//   `varying vec2 vUv;
+//   void main() {
+//     vUv = uv;
+//     gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+//   }`,
+//   // Fragment shader
+//   `uniform float time;
+//   uniform vec3 color;
+//   varying vec2 vUv;
+//   void main() {
+//     float wave = sin(vUv.x * 10.0 + time) * 0.5 + 0.5;
+//     gl_FragColor = vec4(color * wave, 1.0);
+//   }`,
+// )
+
+// // Make sure to extend Three.js with your shader material
+// extend({ OceanMaterial })
+
+// export const OceanMesh = () => {
+//   const ref = useRef()
+//   useFrame((state, delta) => (ref.current.uniforms.time.value += delta))
+
+//   return (
+//     <mesh>
+//       <planeGeometry args={[100, 100, 100, 100]} />
+//       <oceanMaterial attach='material' color='royalblue' />
+//     </mesh>
+//   )
+// }
