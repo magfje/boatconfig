@@ -93,8 +93,9 @@ export function Boat({ selectedDash, selectedMotor, ...props }) {
 
   useFrame((state) => {
     const t = state.clock.getElapsedTime()
-    ref.current.rotation.set(Math.cos(t / 4) / 18, Math.sin(t / 4) / 20, -0.2 - (1 + Math.sin(t / 1.5)) / 50)
-    ref.current.position.y = (1 + Math.sin(t / 1.5)) / 30
+    ref.current.rotation.set(Math.cos(t / 4) / 18, Math.sin(t / 4) / 20, (1 + Math.sin(t / 1.5)) / 50)
+    ref.current.position.y = (6 + Math.sin(t / 1.5)) / 30
+    ref.current.position.x = -2
   })
 
   useEffect(() => {

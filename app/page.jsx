@@ -100,7 +100,7 @@ export default function Page() {
           <Suspense fallback={null}>
             <OrbitControls />
             {/* {dog2vis && <Duck scale={scale} position={[2, -1.6, 5]} />} */}
-            {/* <Boat selectedDash={selectedDash} selectedMotor={selectedMotor} scale={0.5} rotation={[0.45, -0.6, 0]} /> */}
+            <Boat selectedDash={selectedDash} selectedMotor={selectedMotor} scale={0.5} rotation={[0.45, -0.6, 0]} />
             <AlphaBoat scale={0.01} position={[0, 0, 0]} />
             <OceanMesh rotation={[0, 0, 0]} color={'#ffffff'} />
             <Common color={'#050505'} />
